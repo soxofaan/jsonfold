@@ -27,8 +27,11 @@ def fold_iter(
             if stripped in {"}", "},", "]", "],"}:
                 # Close current level: time to see if we can fold or not (collapse to multi-line)
                 closed = stack.pop()
-                # TODO: remove space after trailing element
-                folded = closed[0] + " ".join(s.strip() for s in closed[1:])
+                folded = (
+                    closed[0]
+                    + " ".join(s.strip() for s in closed[1:-1])
+                    + closed[-1].strip()
+                )
 
                 if len(folded) > max_width:
                     # Collapse all levels (if not already):
