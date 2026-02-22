@@ -1,8 +1,12 @@
 import json
-from typing import List, Iterable
+from typing import List, Iterable, Iterator
+
+_DEFAULT_MAX_WIDTH = 80
 
 
-def json_fold(lines: Iterable[str], max_width: int = 40):
+def fold_iter(
+    lines: Iterable[str], max_width: int = _DEFAULT_MAX_WIDTH
+) -> Iterator[str]:
     # Stack of buffers
     stack: List[None | List[str]] = []
 
@@ -17,7 +21,8 @@ def json_fold(lines: Iterable[str], max_width: int = 40):
                 stack[-1].append(line)
 
                 closed = stack.pop()
-                folded = closed[0] + "".join(s.strip() for s in closed[1:])
+                # TODO: remove space after trailing element
+                folded = closed[0] + " ".join(s.strip() for s in closed[1:])
                 if len(folded) > max_width:
                     # Collapse all levels:
                     for level in range(len(stack)):
@@ -28,7 +33,7 @@ def json_fold(lines: Iterable[str], max_width: int = 40):
                     yield from closed
                 else:
                     # Move folded result up one level
-                    if stack[-1]:
+                    if stack and stack[-1]:
                         stack[-1].append(folded)
                     else:
                         yield folded
@@ -36,10 +41,18 @@ def json_fold(lines: Iterable[str], max_width: int = 40):
                 yield line
         else:
             # Append to current buffer
-            if stack[-1]:
+            if stack and stack[-1]:
                 stack[-1].append(line)
             else:
                 yield line
+
+
+def fold(encoded: str, max_width: int = _DEFAULT_MAX_WIDTH) -> str:
+    return "\n".join(fold_iter(encoded.split("\n"), max_width=max_width))
+
+
+def dumps(obj, max_width: int = _DEFAULT_MAX_WIDTH) -> str:
+    return fold(json.dumps(obj=obj, indent=2), max_width=max_width)
 
 
 if __name__ == "__main__":
@@ -72,5 +85,5 @@ if __name__ == "__main__":
     for max_width in [20, 40, 80, 120]:
         print(f"{max_width=}")
 
-        for res in json_fold(lines=lines, max_width=max_width):
+        for res in fold(lines=lines, max_width=max_width):
             print(f"[{len(res):4d}] {res=} ")
