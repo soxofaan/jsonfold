@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+
+[project]
+name = "jsonfold"
+version = "0.1.0"
+description = "Indented JSON, but with folded whitespace to have more data on a single line."
+readme = "README.md"
+requires-python = ">= 3.8"
+authors = [
+  {name = "Stefaan Lippens", email = "soxofaan@gmail.com"},
+]
+license = "MIT"
+license-files = ["LICENSE.txt"]
+keywords = ["JSON", "serialization"]
+
+
+[project.urls]
+Repository = "https://github.com/soxofaan/jsonfold"
+
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
+[tool.hatch.build]
+include = ["jsonfold.py"]
