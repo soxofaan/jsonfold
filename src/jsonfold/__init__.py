@@ -1,4 +1,3 @@
-from jsonfold.fold import fold_iter, fold, dumps
-
+from jsonfold.fold import dumps, fold, fold_iter
 
 __all__ = ["fold_iter", "fold", "dumps"]

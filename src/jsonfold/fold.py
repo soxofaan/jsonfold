@@ -1,5 +1,5 @@
 import json
-from typing import List, Iterable, Iterator
+from typing import Iterable, Iterator, List
 
 _DEFAULT_MAX_WIDTH = 80
 
@@ -9,7 +9,8 @@ def fold_iter(
 ) -> Iterator[str]:
     # Stack of buffers of possibly foldable levels.
     # Note that only the currently deepest levels are tracked,
-    # levels more towards the top that are already collapsed are not represented here anymore.
+    # levels more towards the top that are already collapsed
+    # are not represented here anymore.
     buffer_stack: List[List[str]] = []
 
     for line in lines:
@@ -19,14 +20,16 @@ def fold_iter(
             # Start a new level on the stack
             buffer_stack.append([])
 
-        # Depending on whether we are at a possibly foldable level: yield (collapse) or try folding
+        # Depending on whether we are at a possibly foldable level:
+        # yield (collapse) or try folding
         if not buffer_stack:
             yield line
         else:
             buffer_stack[-1].append(line)
 
             if stripped in {"}", "},", "]", "],"}:
-                # Close current level: time to see if we can fold to one-liner or have to collapse to multi-line
+                # Close current level: time to see if we can fold to one-liner
+                # or have to collapse to multi-line
                 closed = buffer_stack.pop()
                 folded = (
                     closed[0]

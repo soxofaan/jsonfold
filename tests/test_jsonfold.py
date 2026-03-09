@@ -1,6 +1,7 @@
 import json
 import textwrap
 from typing import Iterable, List
+
 import pytest
 
 from jsonfold import dumps, fold_iter
@@ -211,7 +212,7 @@ def test_dumps_listings(max_width, obj, expected):
                 ]
               },
               "_id": "123kthxbye"
-            }""",
+            }""",  # noqa: E501
         ),
         (
             80,
@@ -263,7 +264,7 @@ def test_dumps_listings(max_width, obj, expected):
                     }
                 }
             },
-            '{"a": {"bb": {"ccc": {"dddd": {"eeeee": {"ffffff": "foo"}}}, "CCC": {"D": 13, "DD": 133, "DDD": 1333}}}}',
+            '{"a": {"bb": {"ccc": {"dddd": {"eeeee": {"ffffff": "foo"}}}, "CCC": {"D": 13, "DD": 133, "DDD": 1333}}}}',  # noqa: E501
         ),
         (
             40,
@@ -360,7 +361,10 @@ def test_tracking_iterator_basic():
 
 
 def test_fold_iter_flushing_simple_one_line():
-    """Trivial case: everything fits on one line, so we should consume all input lines immediately."""
+    """
+    Trivial case: everything fits on one line,
+    so we should consume all input lines immediately.
+    """
     data = {"color": "green", "shape": "square"}
     input_lines = TrackingIterator(json.dumps(data, indent=2).split("\n"))
 
@@ -378,7 +382,10 @@ def test_fold_iter_flushing_simple_one_line():
 
 
 def test_fold_iter_flushing_simple_multiline():
-    """Multi-line result, but just one level, so all lines should be consumed immediately."""
+    """
+    Multi-line result, but just one level,
+    so all lines should be consumed immediately.
+    """
     data = {"color": "green", "shape": "square"}
     input_lines = TrackingIterator(json.dumps(data, indent=2).split("\n"))
 
@@ -423,8 +430,9 @@ def test_fold_iter_flushing_nested():
         "    1,",
         "    2",
         "  ],",
-        # TODO: with the next line, it should already be possible to determine that "five" won't fit,
-        #       and it's already time to flush without further consumption.
+        # TODO: with the next line, it should already be possible to determine
+        #       that "five" won't fit, and it's already time to flush
+        #       without further consumption.
         '  "five": [',
         "    0,",
         "    1,",
@@ -452,7 +460,8 @@ def test_fold_iter_flushing_nested():
     assert next(folded) == "  ],"
     assert input_lines.new_consumed() == []
 
-    # Time for "ten": also doesn't fit. Buffer is empty at this point, so we have to consume a bit too.
+    # Time for "ten": also doesn't fit. Buffer is empty at this point,
+    # so we have to consume a bit too.
     assert next(folded) == '  "ten": ['
     assert input_lines.new_consumed() == [
         '  "ten": [',

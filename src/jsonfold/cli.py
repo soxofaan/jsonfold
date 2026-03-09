@@ -1,6 +1,7 @@
 import argparse
 import json
-from jsonfold.fold import _DEFAULT_MAX_WIDTH, fold_iter, dumps
+
+from jsonfold.fold import _DEFAULT_MAX_WIDTH, dumps, fold_iter
 
 
 def main():
@@ -16,7 +17,7 @@ def main():
         "--assume-formatted",
         action="store_true",
         help="""
-            Assume the input is already properly formatted as multiline, indented JSON with.
+            Assume the input is already properly formatted as multiline, indented JSON.
             Allows to fold without parsing the JSON, which is more efficient,
             and avoids subtle re-encoding issues.
         """,
