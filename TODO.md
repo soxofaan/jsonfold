@@ -7,6 +7,8 @@ Some rough ideas for future work:
 - also support Python `repr`?
 - improve documentation
 - compatibility with Windows-style line endings?
-- project structure with src folder?
+- [x] project structure with src folder
 - test compatibility with tab indentation, or even space+tab mixing
 - smarter flushing: see test_fold_iter_flushing_nested
+- release on PyPI
+- automate release procedure through github actions?
