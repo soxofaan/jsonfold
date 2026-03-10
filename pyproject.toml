@@ -23,7 +23,7 @@ Repository = "https://github.com/soxofaan/jsonfold"
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
+    "pytest>=8.3",
 ]
 
 
